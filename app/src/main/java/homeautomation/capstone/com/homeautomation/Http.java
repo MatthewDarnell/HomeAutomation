@@ -1,6 +1,8 @@
 package homeautomation.capstone.com.homeautomation;
 
+import android.app.Application;
 import android.content.Context;
+import android.os.Debug;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
@@ -11,6 +13,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+
 
 /**
  * Created by Matthew on 4/9/2016.
@@ -26,6 +30,12 @@ public class Http {
             @Override
             public void run() {
                 try {
+                    System.setProperty("javax.net.ssl.trustStore", "HubServer.jks");
+          //          System.setProperty("javax.net.ssl.keyStore", "HubServer.jks");
+
+                    System.out.println("CURRENT TRUSTSTORE: " + System.getProperty("javax.net.ssl.trustStore"));
+
+
                     OkHttpClient client = new OkHttpClient();
                     RequestBody body = RequestBody.create(JSON, bodyRequest);
                     Request request = new Request.Builder()

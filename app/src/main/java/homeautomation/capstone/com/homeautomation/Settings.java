@@ -75,7 +75,7 @@ public class Settings {
         return MyPubKey;
     }
 
-    private String URL = "https://192.168.1.84:8080/";
+    private String URL = "https://192.168.0.106:5000/";
 
     public void setURL(String val){
         URL = val;
