@@ -8,6 +8,7 @@
     <string name="devices">Devices</string>
     <string name="device_lights">Lights</string>
     <string name="device_cameras">Cameras</string>
+    <string name="device_temperature">Temperature</string>
     <string name="device_doors">Doors</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="title_activity_devices">DevicesActivity</string>
@@ -27,8 +28,7 @@
     <string name="pubkey">pubkey</string>
 
 
-    <string name="door1">Door 1</string>
-    <string name="door2">Door 2</string>
-    <string name="door3">Door 3</string>
+    <string name="door">Door</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_temperature">TemperatureActivity</string>
 </resources>

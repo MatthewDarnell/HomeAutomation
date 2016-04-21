@@ -31,7 +31,8 @@ public class DevicesActivity extends AppCompatActivity {
 
         Button doorButton = (Button) findViewById(R.id.doors_button),
                lightButton = (Button) findViewById(R.id.lights_button),
-               cameraButton = (Button) findViewById(R.id.cameras_button);
+               cameraButton = (Button) findViewById(R.id.cameras_button),
+                tempButton =  (Button) findViewById(R.id.temperature_button);
 
         final Context context = this;
 
@@ -58,6 +59,14 @@ public class DevicesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(context, CameraPickerActivity.class);
                 //Toast.makeText(context, "Camera Button Clicked", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
+            }
+        });
+
+        tempButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(context, TemperatureActivity.class);
                 startActivity(intent);
             }
         });

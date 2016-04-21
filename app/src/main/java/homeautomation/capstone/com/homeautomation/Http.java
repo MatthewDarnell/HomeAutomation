@@ -3,6 +3,9 @@ package homeautomation.capstone.com.homeautomation;
 import android.content.Context;
 import android.widget.Toast;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -15,6 +18,8 @@ import okhttp3.Response;
 public class Http {
 
     private String s = "";
+    private Document doc = null;
+
     public String get(final String url, final String bodyRequest){
         final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         Thread thread = new Thread(new Runnable(){
@@ -39,6 +44,27 @@ public class Http {
         } catch(InterruptedException e){
         }
         return s;
+    }
+
+
+    public Document jsoupGet(final String url){
+        final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        Thread thread = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    doc = Jsoup.connect(url).get();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+        try {
+            Thread.sleep(5000);
+        } catch(InterruptedException e){
+        }
+        return doc;
     }
 
     public String post(final String url, final String bodyRequest){

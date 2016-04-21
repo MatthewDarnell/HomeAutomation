@@ -9,10 +9,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DoorPickerActivity extends AppCompatActivity {
 
-    @Override
+    private LinearLayout layout;
+    private LinearLayout.LayoutParams params;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_door_picker);
@@ -30,39 +40,46 @@ public class DoorPickerActivity extends AppCompatActivity {
 
         final Context context = this;
 
-        Button door1 = (Button) findViewById(R.id.door1),
-                door2 = (Button) findViewById(R.id.door2),
-                door3 = (Button) findViewById(R.id.door3);
+        layout = (LinearLayout) findViewById(R.id.door_picker_linear_layout);
+        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        door1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToggleDoor(context, 0);
-            }
-        });
+        params.topMargin = 94;
 
-        door2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToggleDoor(context, 1);
-            }
-        });
+        Http http = new Http();
+        Map<Integer, String> doorMap = new HashMap<Integer, String>();
 
+        //String doorStatus = "<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"></head><body><doors><door id=\"1\" status=\"Closed\"><door id=\"2\" status=\"Closed\"><door id=\"3\" status=\"Closed\"><door id=\"4\" status=\"Open\"></door></door></door></door></doors></body></html>";
 
-        door3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToggleDoor(context, 2);
-            }
-        });
+        Document doc = http.jsoupGet( Settings.getInstance().getURL() + "get_door_status");
 
+        //Document doc = Jsoup.parse(doorStatus);
+        Elements title = doc.select("door");
+        for (Element door : title) {
+            final String id = door.attr("id");
+            final String status = door.attr("status");
+            doorMap.put(Integer.parseInt(id), status);
 
+            Button tempButton = new Button(context);
+            tempButton.setLayoutParams(params);
+            tempButton.setText("Door " + id + " - " + status);
+            layout.addView(tempButton);
+
+            tempButton.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    ToggleDoor(context, Integer.parseInt(id));
+                }
+            });
+
+        }
     }
 
     private void ToggleDoor(Context c, int whichDoor) {
         Intent doorToggle = new Intent(c, homeautomation.capstone.com.homeautomation.Devices.Door.class);
         doorToggle.putExtra("DoorID", whichDoor);
         startActivity(doorToggle);
+        finish();
     }
+
 
 }

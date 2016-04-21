@@ -15,6 +15,7 @@
     <Button
         android:id="@+id/doors_button"
         android:layout_width="wrap_content"
+        android:width="50dp"
         android:layout_height="wrap_content"
         android:text="@string/device_doors"
         android:layout_marginTop="94dp" />
@@ -22,6 +23,7 @@
     <Button
         android:id="@+id/cameras_button"
         android:layout_width="wrap_content"
+        android:width="50dp"
         android:layout_height="wrap_content"
         android:text="@string/device_cameras"
         android:layout_marginTop="94dp" />
@@ -30,7 +32,17 @@
         android:id="@+id/lights_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:width="50dp"
         android:text="@string/device_lights"
         android:layout_marginTop="94dp" />
+
+    <Button
+        android:id="@+id/temperature_button"
+        android:layout_width="match_parent"
+        android:width="50dp"
+        android:layout_height="match_parent"
+        android:text="@string/device_temperature"
+        android:layout_marginTop="94dp" />
+
 
 </LinearLayout>
