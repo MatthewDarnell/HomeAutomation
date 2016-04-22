@@ -7,9 +7,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -41,16 +43,18 @@ public class DoorPickerActivity extends AppCompatActivity {
         Map<Integer, String> doorMap = new HashMap<Integer, String>();
 
         //String doorStatus = "<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"></head><body><doors><door id=\"1\" status=\"Closed\"><door id=\"2\" status=\"Closed\"><door id=\"3\" status=\"Closed\"><door id=\"4\" status=\"Open\"></door></door></door></door></doors></body></html>";
+        String doorStatus = http.get( Settings.getInstance(context).getURL() + "get_door_status","", context);
+        Document doc = Jsoup.parse(doorStatus);
+        if(doc==null ){
 
-        Document doc = http.jsoupGet( Settings.getInstance().getURL() + "get_door_status");
-
-        //Document doc = Jsoup.parse(doorStatus);
+            Toast.makeText(context, "No data response "+doc.html(), Toast.LENGTH_LONG).show();
+            finish();
+        }
         Elements title = doc.select("door");
         for (Element door : title) {
             final String id = door.attr("id");
             final String status = door.attr("status");
             doorMap.put(Integer.parseInt(id), status);
-
             Button tempButton = new Button(context);
             tempButton.setLayoutParams(params);
             tempButton.setText("Door " + id + " - " + status);
@@ -63,6 +67,7 @@ public class DoorPickerActivity extends AppCompatActivity {
                 }
             });
 
+
         }
     }
 
@@ -70,7 +75,6 @@ public class DoorPickerActivity extends AppCompatActivity {
         Intent doorToggle = new Intent(c, homeautomation.capstone.com.homeautomation.Devices.Door.class);
         doorToggle.putExtra("DoorID", whichDoor);
         startActivity(doorToggle);
-        finish();
     }
 
 

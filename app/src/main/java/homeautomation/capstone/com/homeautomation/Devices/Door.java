@@ -33,16 +33,12 @@ public class Door extends AppCompatActivity {
             throw new IllegalArgumentException("Door Toggle Activity cannot find bundled [DoorID]");
         }
 
-        String url = Settings.getInstance().getURL();
-
- /*"You chose to toggle door " + doorID + ". IP = " + Settings.getInstance().getURL()*/
-       // Toast.makeText(this, Settings.getInstance().Encrypt("Hello, World!"), Toast.LENGTH_SHORT).show();
-        //Get Door Status
-        //Toast.makeText(this, new Http().get(url + "toggle_door?door_number=" + doorID, ""), Toast.LENGTH_LONG).show();
-        Toast.makeText(this,  "Toggling "+doorID, Toast.LENGTH_LONG).show();
+        String url = Settings.getInstance(this).getURL();
+        Http http = new Http();
+        http.get(url + "toggle_door$" + doorID, "", this);
         Intent intent = new Intent(this, DoorPickerActivity.class);
         startActivity(intent);
-        finish();
+
     }
 
 }

@@ -27,13 +27,13 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         final EditText ip = (EditText) findViewById(R.id.ip);
-        ip.setText(Settings.getInstance().getURL());
+        ip.setText(Settings.getInstance(c).getURL());
 
         Button setURLBtn = (Button) findViewById(R.id.set_url);
         setURLBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Settings.getInstance().setURL(ip.getText().toString());
+                Settings.getInstance(c).setURL(ip.getText().toString(), c);
                 Toast.makeText(c, "URL Set", Toast.LENGTH_SHORT).show();
             }
         });

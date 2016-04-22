@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         final Context context = this;
 
         //Sync Server Pub Key
-        Settings.getInstance().SyncToServer();
+        Settings.getInstance(context).SyncToServer(this);
 
         //Get My KeyPair
         SharedPreferences sharedPref = context.getSharedPreferences(
@@ -41,15 +41,15 @@ public class MainActivity extends AppCompatActivity {
             final byte[] pk = kp.getPublicKey(),
                          sk = kp.getSecretKey();
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(getString(R.string.privkey), Settings.getInstance().ByteArrayToStr(sk));
-            editor.putString(getString(R.string.pubkey), Settings.getInstance().ByteArrayToStr(pk));
+            editor.putString(getString(R.string.privkey), Settings.getInstance(context).ByteArrayToStr(sk));
+            editor.putString(getString(R.string.pubkey), Settings.getInstance(context).ByteArrayToStr(pk));
             editor.commit();
         }
         else{
             Toast.makeText(this, MyPubKey, Toast.LENGTH_LONG).show();
         }
 
-        Settings.getInstance().SetKeyPair(MyPubKey, MyPrivKey);
+        Settings.getInstance(context).SetKeyPair(MyPubKey, MyPrivKey);
 
 
         //Buttons

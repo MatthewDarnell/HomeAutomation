@@ -34,7 +34,7 @@ public class LightPickerActivity extends AppCompatActivity {
 
         Http http = new Http();
         //String lightStatus = "<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"></head><body>Light1: out (of the scope of this project)</body></html>";
-        Document doc = http.jsoupGet(Settings.getInstance().getURL() + "get_light_status");
+        Document doc = http.jsoupGet(Settings.getInstance(context).getURL() + "get_light_status", context);
 
         //Document doc = Jsoup.parse(lightStatus);
         Elements body = doc.select("body");

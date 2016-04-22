@@ -50,9 +50,9 @@ public class Settings {
         return s;
     }
 
-    public void SyncToServer(){
+    public void SyncToServer(final Context c){
         Http http = new Http();
-        String pubkey = http.get(this.getURL() + "getPubKey", "");
+        String pubkey = http.get(this.getURL() + "getPubKey", "", c);
         if(pubkey.length() > 0){
             this.ServerPubKey = StrToByteArray(pubkey);
         }
@@ -75,11 +75,11 @@ public class Settings {
         return MyPubKey;
     }
 
-    private String URL = "https://192.168.0.106:5000/";
+    private String URL = "https://192.168.1.84:5000/";
 
-    public void setURL(String val){
+    public void setURL(String val, final Context c){
         URL = val;
-        this.SyncToServer();
+        this.SyncToServer(c);
     }
     public String getURL(){
         return URL;
@@ -89,13 +89,13 @@ public class Settings {
         return crypto.Encrypt(StrToByteArray(m));
     }
 
-    protected Settings(){
-        this.SyncToServer();
+    protected Settings(final Context c){
+        this.SyncToServer(c);
     }
 
-    public static synchronized Settings getInstance(){
+    public static synchronized Settings getInstance(final Context c){
         if(null == mInstance){
-            mInstance = new Settings();
+            mInstance = new Settings(c);
         }
         return mInstance;
     }

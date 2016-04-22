@@ -1,5 +1,6 @@
 package homeautomation.capstone.com.homeautomation;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,7 +20,7 @@ public class RegisterActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        final Context context = this;
         final EditText password = (EditText) findViewById(R.id.password);
         Button registerButton = (Button) findViewById(R.id.register);
 
@@ -27,7 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String pass = password.getText().toString();
-                String pubkey = Settings.getInstance().GetPubKey();
+                String pubkey = Settings.getInstance(context).GetPubKey();
                 String json = "{\"Password\":\"" + pass + "\", \"PubKey\": \"" + pubkey + "\"}";
                 Http http = new Http();
                 //Transmit Password + Public Key to Server
