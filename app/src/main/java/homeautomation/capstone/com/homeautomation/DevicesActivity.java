@@ -34,6 +34,7 @@ public class DevicesActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, DoorPickerActivity.class);
                 //Toast.makeText(context, "Door Button Clicked", Toast.LENGTH_SHORT).show();
                 startActivity(intent);
+                finish();
             }
         });
 

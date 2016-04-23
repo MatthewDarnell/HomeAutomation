@@ -1,6 +1,11 @@
 package homeautomation.capstone.com.homeautomation.Crypto;
 
+import android.content.Context;
+import android.util.Log;
+
 import homeautomation.capstone.com.homeautomation.Crypto.TweetNaclFast.Box;
+import homeautomation.capstone.com.homeautomation.Settings;
+
 import java.security.SecureRandom;
 
 /**
@@ -15,7 +20,6 @@ import java.security.SecureRandom;
 *   not trusted, require the master password to establish trust.
 * */
 public class Asymmetric {
-
     private TweetNaclFast.Box.KeyPair keypair; //Public Key Encryption to the Server
     private TweetNaclFast.Signature.KeyPair signature; //Our Signature Used To Verify Requests
                                                        // After Initial Password Verification
@@ -23,18 +27,18 @@ public class Asymmetric {
 
     private byte[] pk;
 
-    public Asymmetric(byte[] pk){
-        this.keypair = TweetNaclFast.Box.keyPair();
-        this.signature = TweetNaclFast.Signature.keyPair();
+    public Asymmetric(byte[] pk, byte[] MyPrivKey, byte[] MyPrivSig){
+        this.keypair = TweetNaclFast.Box.keyPair_fromSecretKey(MyPrivKey);
+        this.signature = TweetNaclFast.Signature.keyPair_fromSecretKey(MyPrivSig);
         sig = null;
         this.pk = pk;
         sig = new TweetNaclFast.Signature(this.pk, signature.getSecretKey());
     }
 
-    public String Encrypt(byte[] message){
+    public String Encrypt(byte[] message, Context c){
         byte[] n;
         SecureRandom securerandom = new SecureRandom();
-        n = securerandom.generateSeed(8); //Max 8 bytes for long :(
+        n = securerandom.generateSeed(24); //Max 8 bytes for long :(
         long nonce = 0;
         for(int i=0; i < n.length; i++){
             nonce += ((long) n[i] & 0xffL) << (8 * i);
@@ -52,13 +56,18 @@ public class Asymmetric {
 
         //JSON object
         String retVal = "{" +
-                        "\"nonce\":" + nonce + "," +
-                        "\"hash\":" + hash.toString() + "\"," +
-                        "\"encryptedMessage\":" + encryptedMessage.toString() + "\"," +
-                        "\"signature\":" + signedMessage.toString() + "\"" +
+                        "\"nonce\":\"" + Settings.getInstance(c).bytesToHex(n) + "\"," +
+                        "\"hash\":\"" + Settings.getInstance(c).bytesToHex(hash) + "\"," +
+                        "\"publicKey\":\"" + Settings.getInstance(c).bytesToHex(keypair.getPublicKey()) + "\"," +
+                        "\"encryptedMessage\":\"" + Settings.getInstance(c).bytesToHex(encryptedMessage) + "\"," +
+                        "\"signature\":\"" +  Settings.getInstance(c).bytesToHex(signedMessage) + "\"" +
                         "}";
 
-        return retVal;
+        String hex= Settings.getInstance(c).toHexString(
+                Settings.getInstance(c).StrToByteArray(retVal)
+                );
+        Log.d("PUBKEY", hex);
+        return hex;
     }
 
 }

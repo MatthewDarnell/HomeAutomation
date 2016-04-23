@@ -7,12 +7,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 
+import homeautomation.capstone.com.homeautomation.DevicesActivity;
 import homeautomation.capstone.com.homeautomation.DoorPickerActivity;
 import homeautomation.capstone.com.homeautomation.Http;
+import homeautomation.capstone.com.homeautomation.MainActivity;
 import homeautomation.capstone.com.homeautomation.R;
 import homeautomation.capstone.com.homeautomation.Settings;
 
@@ -35,10 +38,16 @@ public class Door extends AppCompatActivity {
 
         String url = Settings.getInstance(this).getURL();
         Http http = new Http();
-        http.get(url + "toggle_door$" + doorID, "", this);
-        Intent intent = new Intent(this, DoorPickerActivity.class);
-        startActivity(intent);
+        Settings settings = Settings.getInstance(this);
 
+        String encrypted = settings.Encrypt(url + "toggle_door$" + doorID, this);
+        Log.d("PUBKEY", "Encrypted: " + encrypted);
+        http.get(url + "req$" + encrypted, "", this);
+
+        //http.get(url + "toggle_door$" + doorID, "", this);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }

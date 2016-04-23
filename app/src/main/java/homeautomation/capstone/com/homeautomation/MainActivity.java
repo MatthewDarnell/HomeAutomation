@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,21 +36,41 @@ public class MainActivity extends AppCompatActivity {
         String MyPrivKey = sharedPref.getString(getString(R.string.privkey), "");
         String MyPubKey = sharedPref.getString(getString(R.string.pubkey), "");
 
+        String MyPubSig = sharedPref.getString(getString(R.string.pubsig), "");
+        String MySecretSig = sharedPref.getString(getString(R.string.privsig), "");
+
+
+       // if(MyPubSig.equals("") || MySecretSig.equals("")){
+            //Generate a new keypair
+            TweetNaclFast.Signature.KeyPair sp = TweetNaclFast.Signature.keyPair();
+            final byte[] pubk = sp.getPublicKey(),
+                    seck = sp.getSecretKey();
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.privsig), Settings.getInstance(context).bytesToHex(seck));
+            editor.putString(getString(R.string.pubsig), Settings.getInstance(context).bytesToHex(pubk));
+            editor.commit();
+      //  }
+
+
+
         if(MyPrivKey.equals("") || MyPubKey.equals("")){
             //Generate a new keypair
             TweetNaclFast.Box.KeyPair kp = TweetNaclFast.Box.keyPair();
             final byte[] pk = kp.getPublicKey(),
                          sk = kp.getSecretKey();
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(getString(R.string.privkey), Settings.getInstance(context).ByteArrayToStr(sk));
-            editor.putString(getString(R.string.pubkey), Settings.getInstance(context).ByteArrayToStr(pk));
-            editor.commit();
+            SharedPreferences.Editor e = sharedPref.edit();
+            e.putString(getString(R.string.privkey), Settings.getInstance(context).bytesToHex(sk));
+            e.putString(getString(R.string.pubkey), Settings.getInstance(context).bytesToHex(pk));
+            e.commit();
         }
         else{
-            Toast.makeText(this, MyPubKey, Toast.LENGTH_LONG).show();
+            Log.d("PUBKEY", MyPubKey + " , " + MyPrivKey);
+            Log.d("PUBKEY", MyPubSig + " , " + MySecretSig);
+            //Toast.makeText(this, MyPubKey, Toast.LENGTH_LONG).show();
         }
 
         Settings.getInstance(context).SetKeyPair(MyPubKey, MyPrivKey);
+        Settings.getInstance(context).SetSigPair(MyPubSig, MySecretSig);
 
 
         //Buttons

@@ -75,6 +75,7 @@ public class DoorPickerActivity extends AppCompatActivity {
         Intent doorToggle = new Intent(c, homeautomation.capstone.com.homeautomation.Devices.Door.class);
         doorToggle.putExtra("DoorID", whichDoor);
         startActivity(doorToggle);
+        finish();
     }
 
 

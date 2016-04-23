@@ -27,6 +27,8 @@
     <string name="privkey">privkey</string>
     <string name="pubkey">pubkey</string>
 
+    <string name="privsig">privsig</string>
+    <string name="pubsig">pubsig</string>
 
     <string name="door">Door</string>
     <string name="title_activity_register">RegisterActivity</string>
